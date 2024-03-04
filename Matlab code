@@ -1,0 +1,37 @@
+% Read the audio file
+[y, Fs] = audioread("sound.mp3");
+
+% Display the sampling rate
+disp('Sampling Rate (Fs):');
+disp(Fs);
+
+% Design a low-pass filter
+cutoff_frequency = 3000; % Define the new cutoff frequency (in Hz)
+order = 6; % Define the order of the filter (you can adjust this as needed)
+[b, a] = butter(order, cutoff_frequency/(Fs/2), 'low'); % Design the filter
+
+% Visualize the frequency response of the filter
+freqz(b, a, length(y), Fs);
+
+% Apply the filter to the audio signal using filtfilt
+filtered_signal = filtfilt(b, a, y);
+
+% Time vector
+t = (0:length(y)-1) / Fs;
+
+% Plot original signal
+subplot(2,1,1);
+plot(t, y);
+title('Original Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+% Plot filtered signal
+subplot(2,1,2);
+plot(t, filtered_signal);
+title('Filtered Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+% Adjust plot
+sgtitle('Original and Filtered Signals');
